@@ -1,7 +1,8 @@
+---
 # main.yml
 # Ansible Playbook for configuring and updating kubernetes nodes
 
-- name: Configure and Update Web Server
+- name: install packages
   hosts: kubenodes
   become: yes
   tasks:
@@ -10,7 +11,25 @@
         update_cache: yes
         cache_valid_time: 3600
     - name: install vim
-      apt: 
+      apt:
         name: vim
         state: present
-        
+
+- name: Add alias to user's shell configuration
+  hosts: kubenodes
+  tasks:
+    - name: Ensure the alias is added to .bashrc
+      lineinfile:
+        path: ~/.bashrc  # Change this if you use a different shell (e.g., .bash_profile, .zshrc)
+        line: "alias ll='ls -alF'"
+        state: present
+    - name: Ensure .bash_profile exists
+      file:
+        path: ~/.bash_profile
+        state: touch  # This will create the file if it does not exist
+    - name: Ensure the alias is added to .bash_profile
+      lineinfile:
+        path: ~/.bash_profile  # For login shells
+        line: "alias ll='ls -alF'"
+        state: present
+
