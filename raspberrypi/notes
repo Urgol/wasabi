@@ -3,3 +3,5 @@
 - static ip
 sudo nmcli con mod "preconfigured" ipv4.addresses 192.168.100.196/24 ipv4.gateway 192.168.100.1 ipv4.dns 192.168.100.1 ipv4.method manual
 sudo systemctl restart NetworkManager
+
+apt install
