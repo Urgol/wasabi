@@ -5,6 +5,8 @@ sudo nmcli con mod "preconfigured" ipv4.addresses 192.168.100.196/24 ipv4.gatewa
 sudo systemctl restart NetworkManager
 
 - ssh keys
+create key
+ssh-add ~/.ssh/id_ed25519
 chmod 600 /home/user1/.ssh/project_key # otherwise you cannot connect to github
 
-apt install
+copy ssh to remote

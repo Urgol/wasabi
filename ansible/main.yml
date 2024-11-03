@@ -3,7 +3,7 @@
 # Ansible Playbook for configuring and updating kubernetes nodes
 
 - name: install packages
-  hosts: kubenodes
+  hosts: all
   become: yes
   tasks:
     - name: run apt update
@@ -15,9 +15,18 @@
         name: vim
         state: present
 
-- name: Add alias to user's shell configuration
-  hosts: kubenodes
+- name: bootstrap
+  hosts: all
+  become: yes
   tasks:
+    - name: run apt update
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+    - name: install vim
+      apt:
+        name: vim
+        state: present
     - name: Ensure the alias is added to .bashrc
       lineinfile:
         path: ~/.bashrc  # Change this if you use a different shell (e.g., .bash_profile, .zshrc)
@@ -33,3 +42,25 @@
         line: "alias ll='ls -alF'"
         state: present
 
+- name: bootstrap k8s
+  hosts: kubenodes
+  become: yes
+  tasks:
+    - name: install node_export
+      apt:
+        name: prometheus.prometheus.node_exporter
+        state: present
+
+
+- name: grafana
+  hosts: monitoring
+  become: yes
+  tasks:
+    - name: run apt update
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+    - name: install grafana
+      apt:
+        name: grafana
+        state: present
