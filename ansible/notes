@@ -4,4 +4,4 @@
 ansible all -i inventory.ini -m ping
 
 # execute commando on nodes
-ansible kubenodes -shell -a "lsb_release -a"
+ansible kubenodes -m shell -a "lsb_release -a"
