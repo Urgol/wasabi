@@ -2,20 +2,7 @@
 # main.yml
 # Ansible Playbook for configuring and updating kubernetes nodes
 
-- name: install packages
-  hosts: all
-  become: yes
-  tasks:
-    - name: run apt update
-      apt:
-        update_cache: yes
-        cache_valid_time: 3600
-    - name: install vim
-      apt:
-        name: vim
-        state: present
-
-- name: bootstrap
+- name: bootstrap all
   hosts: all
   become: yes
   tasks:
@@ -46,16 +33,23 @@
   hosts: kubenodes
   become: yes
   tasks:
-    - name: install node_export
+    - name: install prometheus-node-exporter
       apt:
-        name: prometheus.prometheus.node_exporter
+        name: prometheus-node-exporter
         state: present
 
-
-- name: grafana
-  hosts: monitoring
+- name: bootstrap grafana
+  hosts: monitor
   become: yes
   tasks:
+    - name: Add Grafana GPG key
+      apt_key:
+        url: https://packages.grafana.com/gpg.key
+        state: present
+    - name: Add Grafana repository
+      apt_repository:
+        repo: "deb https://packages.grafana.com/oss/deb stable main"
+        state: present
     - name: run apt update
       apt:
         update_cache: yes
