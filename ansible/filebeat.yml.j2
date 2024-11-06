@@ -1,0 +1,12 @@
+filebeat.inputs:
+  - type: log
+    enabled: true
+    paths:
+      - /var/log/*.log
+
+output.logstash:
+  hosts: ["logstash_server_ip:5044"]
+
+# Optional: Configure output for Elasticsearch instead
+# output.elasticsearch:
+#   hosts: ["elasticsearch_server_ip:9200"]
