@@ -1,0 +1,30 @@
+---
+# main.yml
+# Ansible Playbook for configuring and updating kubernetes nodes
+
+- name: bootstrap all
+  hosts: all
+  become: yes
+  tasks:
+    - name: run apt update
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+    - name: install vim
+      apt:
+        name: vim
+        state: present
+    - name: Ensure the alias is added to .bashrc
+      lineinfile:
+        path: ~/.bashrc  # Change this if you use a different shell (e.g., .bash_profile, .zshrc)
+        line: "alias ll='ls -alF'"
+        state: present
+    - name: Ensure .bash_profile exists
+      file:
+        path: ~/.bash_profile
+        state: touch  # This will create the file if it does not exist
+    - name: Ensure the alias is added to .bash_profile
+      lineinfile:
+        path: ~/.bash_profile  # For login shells
+        line: "alias ll='ls -alF'"
+        state: present
